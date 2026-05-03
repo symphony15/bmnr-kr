@@ -1,0 +1,9 @@
+name = "bmnr-kr-proxy"
+main = "worker/index.js"
+compatibility_date = "2024-01-01"
+
+# 배포 후 URL: https://bmnr-kr-proxy.[your-subdomain].workers.dev
+# 이 URL을 src/hooks/useMarketData.js 의 WORKER_URL 에 넣으면 됨
+
+[vars]
+ALLOWED_ORIGINS = "https://bmnr-kr.pages.dev"

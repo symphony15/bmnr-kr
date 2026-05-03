@@ -1,7 +1,10 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Dashboard from './components/Dashboard'
 import AccumulationChart from './components/AccumulationChart'
 import StakingMetrics from './components/StakingMetrics'
+import NewsSection from './components/NewsSection'
 import Commentary from './components/Commentary'
+import Admin from './pages/Admin'
 
 function Header() {
   return (
@@ -13,24 +16,24 @@ function Header() {
           </div>
           <div>
             <span className="font-bold text-white text-sm">BMNR-KR</span>
-            <span className="text-gray-600 text-xs ml-2">이더리움 DAT 분석 허브</span>
+            <span className="text-gray-600 text-xs ml-2 hidden sm:inline">이더리움 DAT 분석 허브</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs text-gray-500">
+        <div className="flex items-center gap-3 text-xs text-gray-500">
           <a
             href="https://finance.yahoo.com/quote/BMNR/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="hover:text-white transition-colors hidden sm:inline"
           >
-            BMNR 주가 ↗
+            BMNR ↗
           </a>
           <a
             href="https://beaconcha.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="hover:text-white transition-colors hidden sm:inline"
           >
             beaconcha.in ↗
           </a>
@@ -44,13 +47,13 @@ function Header() {
 function HeroStrip() {
   return (
     <div className="bg-gradient-to-r from-eth-blue/10 via-eth-purple/10 to-surface border-b border-border">
-      <div className="max-w-5xl mx-auto px-4 py-5">
-        <h1 className="text-xl font-bold text-white">
+      <div className="max-w-5xl mx-auto px-4 py-4 sm:py-5">
+        <h1 className="text-base sm:text-xl font-bold text-white">
           BitMine Immersion Technologies
-          <span className="text-gray-500 font-normal text-base ml-2">$BMNR</span>
+          <span className="text-gray-500 font-normal text-sm sm:text-base ml-2">$BMNR</span>
         </h1>
-        <p className="text-sm text-gray-400 mt-1">
-          나스닥 상장 이더리움 DAT 기업 — 한국어 분석 허브 by{' '}
+        <p className="text-xs sm:text-sm text-gray-400 mt-1">
+          NYSE 상장 이더리움 DAT 기업 — 한국어 분석 허브 by{' '}
           <a href="https://youtube.com/@비욘드로스" target="_blank" rel="noopener noreferrer" className="text-eth-blue hover:underline">
             비욘드로스
           </a>
@@ -68,27 +71,40 @@ function Footer() {
           BMNR-KR은 투자 권유 사이트가 아닙니다. 개인 분석 목적으로만 운영됩니다.
         </p>
         <p className="text-xs text-gray-700 mt-1">
-          데이터 출처: SEC 공시, beaconcha.in, Yahoo Finance · 비욘드로스 운영
+          데이터 출처: SEC 공시, beaconcha.in, CoinGecko · 비욘드로스 운영
         </p>
+        <a href="/admin" className="text-xs text-gray-800 hover:text-gray-600 mt-2 inline-block transition-colors">
+          관리자
+        </a>
       </div>
     </footer>
   )
 }
 
-export default function App() {
+function MainPage() {
   return (
     <div className="min-h-screen bg-surface">
       <Header />
       <HeroStrip />
-
-      <main className="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-10">
+      <main className="max-w-5xl mx-auto px-4 py-6 sm:py-8 flex flex-col gap-10">
         <Dashboard />
         <AccumulationChart />
         <StakingMetrics />
+        <NewsSection />
         <Commentary />
       </main>
-
       <Footer />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
