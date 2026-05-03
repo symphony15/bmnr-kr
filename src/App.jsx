@@ -1,5 +1,6 @@
 import Dashboard from './components/Dashboard'
 import AccumulationChart from './components/AccumulationChart'
+import StakingMetrics from './components/StakingMetrics'
 import Commentary from './components/Commentary'
 
 function Header() {
@@ -83,6 +84,7 @@ export default function App() {
       <main className="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-10">
         <Dashboard />
         <AccumulationChart />
+        <StakingMetrics />
         <Commentary />
       </main>
 
