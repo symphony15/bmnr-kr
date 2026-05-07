@@ -6,6 +6,16 @@ import { db } from '../firebase'
 const FALLBACK_NEWS = {
   bmnr: [
     {
+      id: 'f4',
+      date: '2026-05-06',
+      title: 'Bitmine ETH 518만개 돌파 — Alchemy 86%, 스테이킹 $297M 런레이트',
+      summary: '2026-05-03 기준. ETH 5,180,131개 (발행량 4.29%), 스테이킹 4,362,757 ETH. 현금 $7억. 총 자산 $131억. MAVAN 7일 수익률 2.91%. 주간 매집 101,745 ETH 4주 연속.',
+      source: 'PR Newswire',
+      url: 'https://www.prnewswire.com/news-releases/bitmine-immersion-technologies-announces-eth-holdings-reach-5-18-million-tokens-302451469.html',
+      tag: '공시',
+      type: 'bmnr',
+    },
+    {
       id: 'f1',
       date: '2026-04-27',
       title: 'Bitmine ETH 보유량 세계 신기록 508만개 돌파 발표',

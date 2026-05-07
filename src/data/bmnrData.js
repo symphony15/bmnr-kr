@@ -1,37 +1,37 @@
 // BMNR 핵심 지표
-// 출처: SEC EDGAR 8-K + PR Newswire 공시 기준
-// 기준일: 2026-04-26
+// 출처: PR Newswire 공시 기준 (데이터 기준일: 2026-05-03 16:30 ET)
+// 공시일: 2026-05-06
 
 export const SNAPSHOT = {
-  dataDate: '2026-04-26',
-  dataSource: 'SEC EDGAR 8-K + PR Newswire 공시 기준',
+  dataDate: '2026-05-03',
+  dataSource: 'PR Newswire 공시 기준 (2026-05-06)',
 
   // ETH 보유
-  ethHoldings: 5_078_386,
-  ethSupplyPct: 4.21,             // 총 발행량 1.207억개 기준
+  ethHoldings: 5_180_131,
+  ethSupplyPct: 4.29,             // 총 발행량 1.207억개 기준
   ethTargetPct: 5.0,
 
   // 스테이킹
-  stakedETH: 3_701_589,
-  stakedPct: 72.89,
-  stakingYield: 3.033,            // BMNR 7일 연환산 수익률 (CESR 3.028%)
+  stakedETH: 4_362_757,
+  stakedPct: 84.22,               // 4,362,757 / 5,180,131
+  stakingYield: 2.91,             // MAVAN 7일 연환산 수익률 (%)
 
   // 가격
-  ethPriceUSD: 2_369,
-  stockPriceUSD: 21.88,
+  ethPriceUSD: 2_336,
+  stockPriceUSD: 21.88,           // 🟡 추정값 — 최신 주가는 실시간 참조
 
   // mNAV
   mNAV: 0.93,
   mnavNote: '외부 트래커(bmnr.rocks) 기준 추정값',  // 🟡 추정값
 
   // 수익
-  annualStakingRevenueUSD: 264_000_000,   // 현재 스테이킹 기준
-  annualStakingProjectedUSD: 363_000_000, // 전량 스테이킹 시 추산
+  annualStakingRevenueUSD: 297_000_000,   // 현재 스테이킹 기준 (런레이트)
+  annualStakingProjectedUSD: 352_000_000, // 전량 스테이킹 시 추산 (2.91% 기준)
 
   // 자산 구성
-  totalAssetsUSD: 13_300_000_000,   // 크립토 + 현금 + 문샷 합계
-  cashUSD: 940_000_000,
-  orbsUSD: 91_000_000,              // Eightco Holdings (NASDAQ: ORBS)
+  totalAssetsUSD: 13_100_000_000,   // 크립토 + 현금 + 문샷 합계
+  cashUSD: 700_000_000,             // $7억 현금
+  orbsUSD: 83_000_000,              // Eightco Holdings (NASDAQ: ORBS)
   beastIndustriesUSD: 200_000_000,
   btcHoldings: 200,                 // BTC 보유량
 }
@@ -40,7 +40,7 @@ export const SNAPSHOT = {
 export const ALCHEMY_PROGRESS = {
   current: SNAPSHOT.ethSupplyPct,
   target: SNAPSHOT.ethTargetPct,
-  pct: 84.2,  // 공시 기준 "84% of the way to the Alchemy of 5%"
+  pct: 86,  // 공시 기준 "86% of the way to the Alchemy of 5%" (10개월만에 달성)
 }
 
 // 주간 매집 히스토리 — SEC EDGAR 8-K + PR Newswire 공시 검증값만
@@ -55,10 +55,26 @@ export const ACCUMULATION_DATA = [
   { date: '2026-04-12', eth: 4_874_858, label: '26.04.12' },
   { date: '2026-04-19', eth: 4_976_485, label: '26.04.19' },
   { date: '2026-04-26', eth: 5_078_386, label: '26.04.26' },
+  { date: '2026-05-03', eth: 5_180_131, label: '26.05.03' },
 ]
 
 // 주간 분석 코멘터리
 export const COMMENTARY = [
+  {
+    id: 4,
+    date: '2026-05-06',
+    week: '2026년 19주차',
+    title: 'ETH 518만개 돌파 — Alchemy 86%, 스테이킹 $297M 런레이트',
+    confidence: 'green',
+    body: `2026-05-03 기준 PR Newswire 공시. ETH 보유 5,180,131개 (발행량 4.29%), 스테이킹 4,362,757 ETH (84.22%).
+
+[사실] 스테이킹 연환산 수익 $297M (2.91% MAVAN 7일 기준). 전량 스테이킹 시 $352M 추산.
+[사실] 현금 잔고 $7억. 총 자산(크립토+현금+문샷) $131억. Alchemy of 5% 진행률 86% — 10개월 만에 달성.
+[사실] 주간 매집 101,745 ETH (4주 연속 10만개 초과). BMNR 미국 173번째 거래량 종목 ($6.25억/일, 5일 평균).
+[해석] ETH가 이란전쟁 이후 S&P500 대비 1,380bp 아웃퍼폼. Polymarket CLARITY Act 통과 확률 60%+.
+[주의] 이번 공시에서 신주 발행 자금 조달 방식 여전히 미공시.`,
+    tags: ['518만', 'Alchemy86%', '스테이킹297M', 'CLARITY'],
+  },
   {
     id: 1,
     date: '2026-04-28',
