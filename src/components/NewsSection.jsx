@@ -96,8 +96,8 @@ function NewsCard({ item }) {
           </a>
         ) : item.title}
       </h3>
-      {item.summary && (
-        <p className="text-xs text-gray-500 leading-relaxed">{item.summary}</p>
+      {(item.summary || item.content) && (
+        <p className="text-xs text-gray-500 leading-relaxed">{item.summary || item.content}</p>
       )}
     </article>
   )
