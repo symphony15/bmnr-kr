@@ -40,6 +40,26 @@ const FALLBACK_NEWS = {
   ],
 }
 
+function formatDate(item) {
+  const raw = item.date || item.createdAt
+  if (!raw) return null
+
+  // date-only string (e.g. "2026-04-27")
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+    return raw.replace(/-/g, '.')
+  }
+
+  const d = new Date(raw)
+  if (isNaN(d.getTime())) return null
+
+  const yyyy = d.getFullYear()
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  const hh = String(d.getHours()).padStart(2, '0')
+  const min = String(d.getMinutes()).padStart(2, '0')
+  return `${yyyy}.${mm}.${dd} ${hh}:${min}`
+}
+
 const TAG_COLORS = {
   공시: 'badge-green',
   사업: 'badge-green',
@@ -57,7 +77,7 @@ function NewsCard({ item }) {
           <span className={TAG_COLORS[item.tag] ?? 'badge-yellow'}>{item.tag}</span>
           <span className="text-xs text-gray-600">{item.source}</span>
         </div>
-        <span className="text-xs text-gray-600 shrink-0">{item.date?.slice(0, 10)}</span>
+        <span className="text-xs text-gray-600 shrink-0">{formatDate(item) ?? ''}</span>
       </div>
       <h3 className="text-sm font-semibold text-white leading-snug mb-1">
         {item.url ? (
@@ -109,11 +129,25 @@ export default function NewsSection() {
     return () => unsub()
   }, [])
 
-  // Firestore 데이터 있으면 사용, 없으면 fallback
+  // Firestore 데이터 있으면 사용, 없으면 fallback → 중복 제거 → 최신순 정렬
   const getNews = (type) => {
-    const fromFirestore = firestoreNews.filter(n => n.type === type)
-    if (fromFirestore.length > 0) return fromFirestore
-    return FALLBACK_NEWS[type] ?? []
+    const raw = firestoreNews.filter(n => n.type === type).length > 0
+      ? firestoreNews.filter(n => n.type === type)
+      : FALLBACK_NEWS[type] ?? []
+
+    const seen = new Set()
+    const uniqueNews = raw.filter(item => {
+      const key = (item.url && item.url.trim()) ? item.url.trim() : item.title?.trim()
+      if (!key || seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+
+    return uniqueNews.sort((a, b) => {
+      const ta = new Date(a.date || a.createdAt || 0).getTime()
+      const tb = new Date(b.date || b.createdAt || 0).getTime()
+      return tb - ta
+    })
   }
 
   const news = getNews(activeTab)
