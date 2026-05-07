@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase'
 
-// 로컬 fallback (Firestore 데이터 없을 때)
 const FALLBACK_NEWS = {
   bmnr: [
     {
@@ -53,15 +52,9 @@ const FALLBACK_NEWS = {
 function formatDate(item) {
   const raw = item.date || item.createdAt
   if (!raw) return null
-
-  // date-only string (e.g. "2026-04-27")
-  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
-    return raw.replace(/-/g, '.')
-  }
-
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw.replace(/-/g, '.')
   const d = new Date(raw)
   if (isNaN(d.getTime())) return null
-
   const yyyy = d.getFullYear()
   const mm = String(d.getMonth() + 1).padStart(2, '0')
   const dd = String(d.getDate()).padStart(2, '0')
@@ -111,19 +104,20 @@ function EmptyState() {
   )
 }
 
+const PAGE_SIZE = 5
+
 export default function NewsSection() {
   const [activeTab, setActiveTab] = useState('bmnr')
   const [firestoreNews, setFirestoreNews] = useState([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
 
-  // Firestore 실시간 구독
   useEffect(() => {
     const q = query(
       collection(db, 'news'),
       orderBy('date', 'desc'),
-      limit(30)
+      limit(100)
     )
-
     const unsub = onSnapshot(q,
       (snapshot) => {
         const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
@@ -135,11 +129,9 @@ export default function NewsSection() {
         setLoading(false)
       }
     )
-
     return () => unsub()
   }, [])
 
-  // Firestore 데이터 있으면 사용, 없으면 fallback → 중복 제거 → 최신순 정렬
   const getNews = (type) => {
     const raw = firestoreNews.filter(n => n.type === type).length > 0
       ? firestoreNews.filter(n => n.type === type)
@@ -160,7 +152,15 @@ export default function NewsSection() {
     })
   }
 
-  const news = getNews(activeTab)
+  const handleTabChange = (tab) => {
+    setActiveTab(tab)
+    setPage(1)
+  }
+
+  const allNews = getNews(activeTab)
+  const totalPages = Math.ceil(allNews.length / PAGE_SIZE)
+  const news = allNews.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+
   const bmnrCount = firestoreNews.filter(n => n.type === 'bmnr').length
   const cryptoCount = firestoreNews.filter(n => n.type === 'crypto').length
 
@@ -175,46 +175,67 @@ export default function NewsSection() {
               <span className="text-[10px] text-gray-600">실시간</span>
             </span>
           )}
-          {loading && (
-            <span className="text-xs text-gray-600">불러오는 중...</span>
-          )}
+          {loading && <span className="text-xs text-gray-600">불러오는 중...</span>}
         </div>
       </div>
 
-      {/* 탭 */}
       <div className="flex gap-1 mb-4 bg-surface-2 p-1 rounded-lg w-fit">
         <button
-          onClick={() => setActiveTab('bmnr')}
+          onClick={() => handleTabChange('bmnr')}
           className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
             activeTab === 'bmnr' ? 'bg-eth-blue text-white' : 'text-gray-500 hover:text-gray-300'
           }`}
         >
           BMNR 소식
-          {bmnrCount > 0 && (
-            <span className="text-[10px] bg-white/20 px-1 rounded">{bmnrCount}</span>
-          )}
+          {bmnrCount > 0 && <span className="text-[10px] bg-white/20 px-1 rounded">{bmnrCount}</span>}
         </button>
         <button
-          onClick={() => setActiveTab('crypto')}
+          onClick={() => handleTabChange('crypto')}
           className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
             activeTab === 'crypto' ? 'bg-eth-blue text-white' : 'text-gray-500 hover:text-gray-300'
           }`}
         >
           ETH / 크립토
-          {cryptoCount > 0 && (
-            <span className="text-[10px] bg-white/20 px-1 rounded">{cryptoCount}</span>
-          )}
+          {cryptoCount > 0 && <span className="text-[10px] bg-white/20 px-1 rounded">{cryptoCount}</span>}
         </button>
       </div>
 
-      {/* 뉴스 목록 */}
       <div className="flex flex-col gap-3">
         {news.length === 0 ? <EmptyState /> : news.map(item => (
           <NewsCard key={item.id} item={item} />
         ))}
       </div>
 
-      {/* Make 연동 안내 */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-3 py-1 rounded text-xs text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            ← 이전
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              className={`w-7 h-7 rounded text-xs font-medium transition-colors ${
+                page === p ? 'bg-eth-blue text-white' : 'text-gray-500 hover:text-white'
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="px-3 py-1 rounded text-xs text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            다음 →
+          </button>
+        </div>
+      )}
+
       <div className="mt-3 p-3 bg-surface-3 rounded-lg">
         <p className="text-xs text-gray-600">
           <span className="text-gray-500">Make 연동 포맷:</span>{' '}
