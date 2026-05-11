@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { COMMENTARY } from '../data/bmnrData'
+import { COMMENTARY, SNAPSHOT } from '../data/bmnrData'
+import { recordCurrentSnapshot } from '../utils/recordMnav.js'
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD ?? 'bmnr2026'
 
@@ -222,6 +223,53 @@ function AddDraftForm({ onAdd }) {
   )
 }
 
+function MnavRecorder() {
+  const [status, setStatus] = useState(null) // null | 'loading' | 'ok' | 'error'
+
+  const handleRecord = async () => {
+    setStatus('loading')
+    try {
+      await recordCurrentSnapshot()
+      setStatus('ok')
+    } catch (e) {
+      console.error(e)
+      setStatus('error')
+    }
+  }
+
+  return (
+    <section className="mb-10">
+      <h2 className="text-base font-semibold text-white mb-3">
+        mNAV 히스토리 기록
+        <span className="text-xs text-gray-600 font-normal ml-2">Firestore mnav_history</span>
+      </h2>
+      <div className="card space-y-3">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-gray-400">
+          <span>날짜: <span className="text-white">{SNAPSHOT.dataDate}</span></span>
+          <span>mNAV: <span className="text-white">{SNAPSHOT.mNAV}</span></span>
+          <span>ETH 가격: <span className="text-white">${SNAPSHOT.ethPriceUSD.toLocaleString()}</span></span>
+          <span>BMNR 주가: <span className="text-white">${SNAPSHOT.stockPriceUSD}</span></span>
+          <span>ETH 보유: <span className="text-white">{SNAPSHOT.ethHoldings.toLocaleString()}</span></span>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleRecord}
+            disabled={status === 'loading'}
+            className="text-sm px-4 py-2 bg-eth-blue text-white rounded hover:bg-eth-purple transition-colors disabled:opacity-50"
+          >
+            {status === 'loading' ? '기록 중…' : 'Firestore에 기록'}
+          </button>
+          {status === 'ok' && <span className="text-xs text-green-400">✓ 기록 완료</span>}
+          {status === 'error' && <span className="text-xs text-red-400">❌ 오류 발생 — 콘솔 확인</span>}
+        </div>
+        <p className="text-xs text-gray-600">
+          date({SNAPSHOT.dataDate})를 document ID로 사용. 같은 날짜 재기록 시 덮어씀(merge).
+        </p>
+      </div>
+    </section>
+  )
+}
+
 export default function Admin() {
   const [authed, setAuthed] = useState(false)
   const [pw, setPw] = useState('')
@@ -323,6 +371,9 @@ export default function Admin() {
             </div>
           </section>
         )}
+
+        {/* mNAV 히스토리 기록 */}
+        <MnavRecorder />
 
         {/* 기존 코멘터리 (bmnrData.js 기준) */}
         <section>
