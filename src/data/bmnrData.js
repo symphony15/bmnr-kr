@@ -1,23 +1,23 @@
 // BMNR 핵심 지표
-// 출처: PR Newswire 공시 기준 (데이터 기준일: 2026-05-03 16:30 ET)
-// 공시일: 2026-05-06
+// 출처: PR Newswire 공시 기준 (데이터 기준일: 2026-05-10 16:00 ET)
+// 공시일: 2026-05-13
 
 export const SNAPSHOT = {
-  dataDate: '2026-05-03',
-  dataSource: 'PR Newswire 공시 기준 (2026-05-06)',
+  dataDate: '2026-05-10',
+  dataSource: 'PR Newswire 공시 기준 (2026-05-13)',
 
   // ETH 보유
-  ethHoldings: 5_180_131,
-  ethSupplyPct: 4.29,             // 총 발행량 1.207억개 기준
+  ethHoldings: 5_206_790,
+  ethSupplyPct: 4.31,             // 총 발행량 1.207억개 기준
   ethTargetPct: 5.0,
 
   // 스테이킹
-  stakedETH: 4_362_757,
-  stakedPct: 84.22,               // 4,362,757 / 5,180,131
-  stakingYield: 2.91,             // MAVAN 7일 연환산 수익률 (%)
+  stakedETH: 4_712_917,
+  stakedPct: 90.52,               // 4,712,917 / 5,206,790
+  stakingYield: 2.86,             // MAVAN 7일 연환산 수익률 (%)
 
   // 가격
-  ethPriceUSD: 2_336,
+  ethPriceUSD: 2_366,
   stockPriceUSD: 21.88,           // 🟡 추정값 — 최신 주가는 실시간 참조
 
   // mNAV
@@ -25,22 +25,22 @@ export const SNAPSHOT = {
   mnavNote: '외부 트래커(bmnr.rocks) 기준 추정값',  // 🟡 추정값
 
   // 수익
-  annualStakingRevenueUSD: 297_000_000,   // 현재 스테이킹 기준 (런레이트)
-  annualStakingProjectedUSD: 352_000_000, // 전량 스테이킹 시 추산 (2.91% 기준)
+  annualStakingRevenueUSD: 319_000_000,   // 현재 스테이킹 기준 (런레이트)
+  annualStakingProjectedUSD: 352_000_000, // 전량 스테이킹 시 추산 (2.86% 기준)
 
   // 자산 구성
-  totalAssetsUSD: 13_100_000_000,   // 크립토 + 현금 + 문샷 합계
-  cashUSD: 700_000_000,             // $7억 현금
-  orbsUSD: 83_000_000,              // Eightco Holdings (NASDAQ: ORBS)
+  totalAssetsUSD: 13_400_000_000,   // 크립토 + 현금 + 문샷 합계
+  cashUSD: 775_000_000,             // $7.75억 현금
+  orbsUSD: 88_000_000,              // Eightco Holdings (NASDAQ: ORBS)
   beastIndustriesUSD: 200_000_000,
-  btcHoldings: 200,                 // BTC 보유량
+  btcHoldings: 201,                 // BTC 보유량
 }
 
 // Alchemy of 5% 진행률
 export const ALCHEMY_PROGRESS = {
   current: SNAPSHOT.ethSupplyPct,
   target: SNAPSHOT.ethTargetPct,
-  pct: 86,  // 공시 기준 "86% of the way to the Alchemy of 5%" (10개월만에 달성)
+  pct: 86,  // 공시 기준 "86% of the way to the Alchemy of 5%" (11개월만에 달성)
 }
 
 // 주간 매집 히스토리 — SEC EDGAR 8-K + PR Newswire 공시 검증값만
@@ -56,10 +56,28 @@ export const ACCUMULATION_DATA = [
   { date: '2026-04-19', eth: 4_976_485, label: '26.04.19' },
   { date: '2026-04-26', eth: 5_078_386, label: '26.04.26' },
   { date: '2026-05-03', eth: 5_180_131, label: '26.05.03' },
+  { date: '2026-05-10', eth: 5_206_790, label: '26.05.10' },
 ]
 
 // 주간 분석 코멘터리
 export const COMMENTARY = [
+  {
+    id: 5,
+    date: '2026-05-13',
+    week: '2026년 20주차',
+    title: 'ETH 520만개 돌파 — 스테이킹 $319M, 크립토 봄 3연속 월간 상승 확인',
+    confidence: 'green',
+    body: `2026-05-10 기준 PR Newswire 공시. ETH 보유 5,206,790개 (발행량 4.31%), 스테이킹 4,712,917 ETH (90.52%).
+
+[사실] 스테이킹 연환산 수익 $319M (2.86% MAVAN 7일 기준). 전량 스테이킹 완료 시 $352M 추산.
+[사실] 현금 잔고 $7.75억. 총 자산(크립토+현금+문샷) $134억. Alchemy of 5% 진행률 86% — 11개월 만에 달성.
+[사실] 미국 149번째 거래량 종목 ($8.16억/일, 5일 평균). 카바나(148위)·로열카리브안(150위)과 동급.
+[사실] ETH 3개월 연속 월간 상승 — 톰 리 기준 "크립토 봄 확인 조건" 충족 ($2,100 이상 마감 시).
+[사실] 주간 매집 속도 의도적으로 100,000개/주 이하로 낮춤. 5% 목표를 2026년 말까지 유지하기 위한 전략적 결정.
+[해석] 스테이킹 비율 84% → 90%로 상승. 보유 ETH 대부분이 수익 창출 자산으로 전환됨.
+[주의] ETH 가격 $2,100 미만 월말 마감 시 크립토 봄 내러티브 약화 가능성.`,
+    tags: ['520만', '스테이킹319M', '크립토봄', 'MAVAN', 'Alchemy86%'],
+  },
   {
     id: 4,
     date: '2026-05-06',
