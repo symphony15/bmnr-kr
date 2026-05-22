@@ -1,23 +1,24 @@
 // BMNR 핵심 지표
-// 출처: PR Newswire 공시 기준 (데이터 기준일: 2026-05-10 16:00 ET)
-// 공시일: 2026-05-13
+// 출처: X 주간 업데이트 (데이터 기준일: 2026-05-17 추정)
+// 업데이트: 2026-05-20 — 공식 PR Newswire 공시 후 재검증 필요 🟡
 
 export const SNAPSHOT = {
-  dataDate: '2026-05-10',
-  dataSource: 'PR Newswire 공시 기준 (2026-05-13)',
+  dataDate: '2026-05-17',
+  dataSource: 'X 주간 업데이트 (2026-05-20, 공식 공시 전 추정값)',
 
   // ETH 보유
-  ethHoldings: 5_206_790,
-  ethSupplyPct: 4.31,             // 총 발행량 1.207억개 기준
+  ethHoldings: 5_278_462,
+  ethSupplyPct: 4.37,             // 총 발행량 1.207억개 기준
   ethTargetPct: 5.0,
 
   // 스테이킹
   stakedETH: 4_712_917,
-  stakedPct: 90.52,               // 4,712,917 / 5,206,790
-  stakingYield: 2.86,             // MAVAN 7일 연환산 수익률 (%)
+  stakedPct: 89.28,               // 4,712,917 / 5,278,462
+  stakingYield: 2.86,             // MAVAN 7일 연환산 수익률 (%) — 전주 기준 유지
+  stakedValueUSD: 10_300_000_000, // $10.3B (X 포스트 기재값)
 
   // 가격
-  ethPriceUSD: 2_366,
+  ethPriceUSD: 2_185,             // 🟡 추정값 — $10.3B ÷ 4,712,917 ETH
   stockPriceUSD: 21.88,           // 🟡 추정값 — 최신 주가는 실시간 참조
 
   // mNAV
@@ -25,22 +26,22 @@ export const SNAPSHOT = {
   mnavNote: '외부 트래커(bmnr.rocks) 기준 추정값',  // 🟡 추정값
 
   // 수익
-  annualStakingRevenueUSD: 319_000_000,   // 현재 스테이킹 기준 (런레이트)
-  annualStakingProjectedUSD: 352_000_000, // 전량 스테이킹 시 추산 (2.86% 기준)
+  annualStakingRevenueUSD: 294_000_000,   // 현재 스테이킹 기준 런레이트 (2.86% × $2,185 × 4,712,917) 🟡
+  annualStakingProjectedUSD: 330_000_000, // 전량 스테이킹 시 추산 🟡
 
   // 자산 구성
-  totalAssetsUSD: 13_400_000_000,   // 크립토 + 현금 + 문샷 합계
-  cashUSD: 775_000_000,             // $7.75억 현금
-  orbsUSD: 88_000_000,              // Eightco Holdings (NASDAQ: ORBS)
+  totalAssetsUSD: 12_500_000_000,   // 🟡 추정값 — 크립토 + 현금 + 문샷 합계
+  cashUSD: 685_000_000,             // $6.85억 현금
+  orbsUSD: 83_000_000,              // Eightco Holdings (NASDAQ: ORBS)
   beastIndustriesUSD: 200_000_000,
-  btcHoldings: 201,                 // BTC 보유량
+  btcHoldings: 202,                 // BTC 보유량
 }
 
 // Alchemy of 5% 진행률
 export const ALCHEMY_PROGRESS = {
   current: SNAPSHOT.ethSupplyPct,
   target: SNAPSHOT.ethTargetPct,
-  pct: 86,  // 공시 기준 "86% of the way to the Alchemy of 5%" (11개월만에 달성)
+  pct: 87,  // X 업데이트 기준 "87% of the way to the Alchemy of 5%"
 }
 
 // 주간 매집 히스토리 — SEC EDGAR 8-K + PR Newswire 공시 검증값만
@@ -57,10 +58,26 @@ export const ACCUMULATION_DATA = [
   { date: '2026-04-26', eth: 5_078_386, label: '26.04.26' },
   { date: '2026-05-03', eth: 5_180_131, label: '26.05.03' },
   { date: '2026-05-10', eth: 5_206_790, label: '26.05.10' },
+  { date: '2026-05-17', eth: 5_278_462, label: '26.05.17' },
 ]
 
 // 주간 분석 코멘터리
 export const COMMENTARY = [
+  {
+    id: 6,
+    date: '2026-05-20',
+    week: '2026년 21주차',
+    title: 'ETH 527만개 돌파 — Alchemy 87%, 매집 속도 71,672개/주',
+    confidence: 'yellow',
+    body: `2026-05-17 추정 기준 X 주간 업데이트. ETH 보유 5,278,462개 (발행량 4.37%), 스테이킹 4,712,917 ETH (89.28%).
+
+[사실] 주간 매집 71,672 ETH. Alchemy of 5% 진행률 87% — 목표까지 약 72,000 ETH 잔여.
+[사실] 현금 잔고 $6.85억. BTC 202개. ORBS $8,300만. Beast Industries $2억.
+[해석] 스테이킹 비율 90.52% → 89.28%로 소폭 하락. 신규 매집 71,672 ETH가 아직 스테이킹 전환 미완료 상태로 보임.
+[해석] 스테이킹 밸류 $10.3B 기준 내재 ETH 가격 약 $2,185 — 전주($2,366) 대비 하락.
+[주의] 이번 업데이트는 SEC 공시가 아닌 X 소셜미디어 기반. 수치 전체가 🟡 추정값. 공식 PR Newswire 공시 후 재검증 필요.`,
+    tags: ['527만', 'Alchemy87%', '주간매집72K', 'X업데이트'],
+  },
   {
     id: 5,
     date: '2026-05-13',
